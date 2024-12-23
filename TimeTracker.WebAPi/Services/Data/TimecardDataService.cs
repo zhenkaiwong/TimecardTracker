@@ -1,5 +1,8 @@
 using System;
+using System.ComponentModel.Design;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
+using TimeTracker.WebAPi.Exceptions;
 using TimeTracker.WebAPi.Models;
 using TimeTracker.WebAPi.Services.Database;
 
@@ -25,9 +28,20 @@ public class TimecardDataService : IDataService<Timecard>
     return timecard;
   }
 
-  public Task<IEnumerable<Timecard>> GetItemsAsync(Pagination pagination)
+  public async Task<IEnumerable<Timecard>> GetItemsAsync(Pagination pagination)
   {
-    throw new NotImplementedException();
+    int skip = pagination.Skip;
+    int rows = pagination.Rows == 0 ? 10 : pagination.Rows;
+    string search = pagination.Search;
+
+    IQueryable<Timecard> getQuery = _dbContext.Timecards
+      .Where(timecard => timecard.FullTextSearch.Contains(search))
+      .Take(rows)
+      .Skip(skip);
+
+    List<Timecard> timecards = await getQuery.ToListAsync();
+
+    return timecards;
   }
 
   public async Task<Timecard> InsertItemAsync(Timecard item)
@@ -37,12 +51,27 @@ public class TimecardDataService : IDataService<Timecard>
       item.LastUpdated = DateTime.UtcNow;
     }
 
+    if (string.IsNullOrEmpty(item.FullTextSearch))
+    {
+      item.FullTextSearch = BuildFullTextSearch(item);
+    }
+
     await _dbContext.Timecards.AddAsync(item);
+    await _dbContext.SaveChangesAsync();
     return item;
   }
 
   public Task<Timecard> UpdateItemAsync(int id, Timecard updatedItem)
   {
     throw new NotImplementedException();
+  }
+
+  protected virtual string BuildFullTextSearch(Timecard timecard)
+  {
+    StringBuilder stringToSearch = new();
+    stringToSearch.Append(timecard.Subject);
+    stringToSearch.Append(timecard.Comment);
+
+    return stringToSearch.ToString();
   }
 }

@@ -8,6 +8,7 @@ public class Timecard
   public string Comment { get; set; } = string.Empty;
   public string StartTime { get; set; } = string.Empty;
   public string EndTime { get; set; } = string.Empty;
+  public string FullTextSearch { get; set; } = string.Empty;
   public DateTime LastUpdated { get; set; }
   public DateOnly Created { get; set; }
 
