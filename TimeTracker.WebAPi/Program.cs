@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TimeTracker.WebAPi;
 using TimeTracker.WebAPi.Models;
 using TimeTracker.WebAPi.Services.Data;
 using TimeTracker.WebAPi.Services.Database;
@@ -26,6 +27,15 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    using (IServiceScope scope = app.Services.CreateScope())
+    {
+        TimeTrackerDbContext? context = scope.ServiceProvider.GetService<TimeTrackerDbContext>();
+        if (context is null)
+        {
+            throw new InvalidOperationException("Unable to resolve dbcontext from services");
+        }
+        Db.Seed(context);
+    }
 }
 
 app.UseHttpsRedirection();
