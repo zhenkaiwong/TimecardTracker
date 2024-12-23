@@ -19,34 +19,40 @@ public class TimecardController
     _timecardMapper = mapper;
   }
 
-  [HttpGet("/{id}")]
-  public TimecardResponse GetTimecard(int id)
+  [HttpGet("{id}")]
+  public async Task<TimecardResponse> GetTimecard(int id)
   {
-    throw new NotImplementedException();
+    Timecard timecard = await _dataService.GetItemAsync(id);
+    TimecardResponse response = _timecardMapper.MapToResponse(timecard);
+    return response;
   }
 
   [HttpGet]
-  public IEnumerable<TimecardResponse> GetTimecard(Pagination pagination)
+  public async Task<IEnumerable<TimecardResponse>> GetTimecards([FromQuery] Pagination pagination)
   {
-    throw new NotImplementedException();
+    IEnumerable<Timecard> timecards = await _dataService.GetItemsAsync(pagination);
+    IEnumerable<TimecardResponse> timecardResponses =
+      timecards.Select(timecard => _timecardMapper.MapToResponse(timecard));
+
+    return timecardResponses;
   }
 
   [HttpPost]
   public async Task<TimecardResponse> InsertTimecard(TimecardRequest request)
   {
     Timecard timecard = _timecardMapper.MapFromRequest(request);
-    Timecard insertedTimecard = await _dataService.InsertItem(timecard);
+    Timecard insertedTimecard = await _dataService.InsertItemAsync(timecard);
     TimecardResponse response = _timecardMapper.MapToResponse(insertedTimecard);
     return response;
   }
 
-  [HttpPut("/{id}")]
+  [HttpPut("{id}")]
   public TimecardResponse UpdateTimecard(string id, TimecardRequest updatedTimecard)
   {
     throw new NotImplementedException();
   }
 
-  [HttpDelete("/{id}")]
+  [HttpDelete("{id}")]
   public BaseResponse RemoveTimecard(int id)
   {
     throw new NotImplementedException();
