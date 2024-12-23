@@ -14,29 +14,34 @@ public class TimecardDataService : IDataService<Timecard>
   {
     _dbContext = dbContext;
   }
-  public Task DeleteItem(int id)
+  public Task DeleteItemAsync(int id)
   {
     throw new NotImplementedException();
   }
 
-  public async Task<Timecard> GetItem(int id)
+  public async Task<Timecard> GetItemAsync(int id)
   {
     Timecard timecard = await _dbContext.Timecards.SingleAsync(timecard => timecard.Id.Equals(id));
     return timecard;
   }
 
-  public Task<IEnumerable<Timecard>> GetItems(Pagination pagination)
+  public Task<IEnumerable<Timecard>> GetItemsAsync(Pagination pagination)
   {
     throw new NotImplementedException();
   }
 
-  public async Task<Timecard> InsertItem(Timecard item)
+  public async Task<Timecard> InsertItemAsync(Timecard item)
   {
+    if (item.LastUpdated == default)
+    {
+      item.LastUpdated = DateTime.UtcNow;
+    }
+
     await _dbContext.Timecards.AddAsync(item);
     return item;
   }
 
-  public Task<Timecard> UpdateItem(int id, Timecard updatedItem)
+  public Task<Timecard> UpdateItemAsync(int id, Timecard updatedItem)
   {
     throw new NotImplementedException();
   }

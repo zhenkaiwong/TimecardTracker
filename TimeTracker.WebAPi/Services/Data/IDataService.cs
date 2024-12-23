@@ -4,9 +4,9 @@ namespace TimeTracker.WebAPi.Services.Data;
 
 public interface IDataService<T>
 {
-  Task<IEnumerable<T>> GetItems(Pagination pagination);
-  Task<T> GetItem(int id);
-  Task<T> InsertItem(T item);
-  Task<T> UpdateItem(int id, T updatedItem);
-  Task DeleteItem(int id);
+  Task<IEnumerable<T>> GetItemsAsync(Pagination pagination);
+  Task<T> GetItemAsync(int id);
+  Task<T> InsertItemAsync(T item);
+  Task<T> UpdateItemAsync(int id, T updatedItem);
+  Task DeleteItemAsync(int id);
 }
