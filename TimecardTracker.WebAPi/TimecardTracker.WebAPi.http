@@ -1,0 +1,6 @@
+@TimecardTracker.WebAPi_HostAddress = http://localhost:5035
+
+GET {{TimecardTracker.WebAPi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
