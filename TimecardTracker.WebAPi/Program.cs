@@ -13,23 +13,36 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<TimecardDbContext>(options => options.UseInMemoryDatabase("timecards"));
+builder.Services.AddDbContext<TimecardDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("db")));
 
 builder.Services.AddSingleton<ITimecardMapper, TimecardMapper>();
 builder.Services.AddScoped<ITimecardDataService, TimecardDataService>();
 
 var app = builder.Build();
 
+string? dbConnectionString = app.Configuration.GetConnectionString("db");
+
+if (string.IsNullOrEmpty(dbConnectionString) || !dbConnectionString.StartsWith("Data Source="))
+{
+    Console.WriteLine("Unable to start application. You need to ensure the db connection string is valid");
+    return;
+}
+
+string dbFilePath = dbConnectionString.Substring(12);
+Console.WriteLine($"db file path: {dbFilePath}");
+
+if (!File.Exists(dbFilePath))
+{
+    Console.WriteLine($"Unable to find sqlite db file in the specified location from Connection String. The location is: {dbFilePath}");
+    Console.WriteLine("You can create this file by running ef db update command");
+    return;
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    using (IServiceScope scope = app.Services.CreateScope())
-    {
-        TimecardDbContext db = scope.ServiceProvider.GetRequiredService<TimecardDbContext>();
-        DbSeeder.Seed(db);
-    }
 }
 
 app.UseHttpsRedirection();
@@ -39,18 +52,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-class DbSeeder
-{
-    private readonly static List<Timecard> dataset = new() {
-        new Timecard(TimecardType.Activity, "Post base course", "Containers", new TimeOnly(13, 0), new TimeOnly(15, 30), new DateOnly(2024, 12, 22)),
-        new Timecard(TimecardType.Ticket, "CS12345", "Review ticket", new TimeOnly(12, 30), new TimeOnly(13, 00), new DateOnly(2024, 11, 21)),
-        new Timecard(TimecardType.Ticket, "CS12346", "Reproduce issue", new TimeOnly(10, 15), new TimeOnly(11, 30), new DateOnly(2024, 9, 30)),
-    };
-
-    public static void Seed(TimecardDbContext dbContext)
-    {
-        dbContext.Timecards.AddRange(dataset);
-        dbContext.SaveChanges();
-    }
-}
