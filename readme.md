@@ -18,7 +18,19 @@
 
 ## To run local
 
-Install dependencies using following command:
+1. If Migrations folder doesn't exists in WebApi project, then you need to create it by running following command:
+
+```bash
+dotnet ef migrations create InitialCreate
+```
+
+2. Update your database to create sqlite database file and apply migrations
+
+```bash
+dotnet ef database update
+```
+
+3. Now you can run this locally
 
 ```bash
 dotnet run
