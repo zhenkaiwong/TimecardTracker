@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimecardTracker.WebAPi", "TimecardTracker.WebAPi\TimecardTracker.WebAPi.csproj", "{B72DFEEA-F184-4B1B-B4AC-1BA6C9CE2259}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{AC1D5DFD-5034-42ED-A05E-22D892DC4A99}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimecardTracker.Tests", "TimecardTracker.Tests\TimecardTracker.Tests.csproj", "{D7B3CD84-9906-4DE7-869C-64BABF5434B6}"
 EndProject
 Global
