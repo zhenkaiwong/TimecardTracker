@@ -1,5 +1,3 @@
-using System;
-
 namespace TimecardTracker.WebAPi.Exceptions;
 
 public class InvalidTimecardRequest : Exception

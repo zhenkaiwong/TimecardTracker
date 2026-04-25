@@ -1,4 +1,3 @@
-using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using TimecardTracker.WebAPi.Exceptions;
 using TimecardTracker.WebAPi.Mappers;

@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TimecardTracker.WebAPi.Mappers;
 using TimecardTracker.WebAPi.Models;
-using TimecardTracker.WebAPi.Models.Timecard;
 using TimecardTracker.WebAPi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
