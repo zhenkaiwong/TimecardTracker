@@ -38,4 +38,4 @@ dotnet run
 
 ## Note
 
-To see the web app that consume this API, check this repo: (link to repo will be updated here once it is ready)
+To see the web app that consume this API, check this repo: https://github.com/zhenkaiwong/TimecardTrakcer.Frontend
